@@ -1,0 +1,440 @@
+<!doctype html>
+<html>
+
+<head>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <!--- <link rel="stylesheet" href="range-slider-master/css/rSlider.min.css"> --->
+</head>
+
+<body>
+    <h1>Canadian Food Price Inflation (2017 to 2023)</h1>
+
+    <p>Canadians are increasingly confronted with sticker shock at the grocery store, with prices of common foods rising at a swift pace. Food price inflation has been one of the most concerning and persistent elements of Canada's post-pandemic battle with inflation.</p>
+    <p>This post offers interactive tools which highlight prices across a variety of grocery store foods -- from tracking price changes over time, to comparing prices by category, and beyond:</p>
+
+    <ul>
+        <li>What's the average price for common grocery items like broccoli, chicken, or pasta?</li>
+        <li>Which foods have increased in price the most (and the least) in recent years?</li>
+        <li>How has the price of your average grocery shopping trip changed?</li>
+    </ul>
+
+    <p>This analysis is based on a <a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810024501" rel="noopener" target="_blank">dataset published by Statistics Canada</a>, which tracks the prices of 110 common grocery store food items, across the time period of 2017 to 2023. Let's jump in!</p>
+
+    &nbsp;
+
+    <h2>Comparing Food Prices Changes by Category</h2>
+
+    <p>Select a grocery category to explore (meat, vegetables, dairy, etc.). Use the slider to pick a time period. The tool will then display the percentage change in prices for common items in the category.</p>
+
+    <div id="categorySelectionDiv">
+        <table id="categorySelectionTable">
+            <tr>
+                <td class="categorySelectRow1" >
+                    <label for="categoryList">Category:</label>
+                </td>
+
+                <td class="categorySelectRow1" >
+                    <!---
+                    <input id="categoryInput" list="categoryList" name="category" value="Meat / protein" class="userInput2 select-style" onfocus="this.value=''" onchange="this.blur();">
+                    <datalist id="categoryList" ></datalist>
+                    -->
+                    <select id="categoryInput" class="userInput2 select-style">
+                    </select>
+                </td>
+
+                <td id="categoryIcon">
+                </td>
+            </tr>
+            <tr>
+                <td colspan=3 id="yearRangeSliderCell"><input type="text" id="yearRangeSlider"/></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="categoryChartDiv">
+        <canvas id="categoryChart"></canvas>
+    </div>
+
+    <button class="saveImageButton" onclick="saveChart(categoryChart)">Save image 💾</button>
+
+    <table id="categoryOutputTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th id="startingPriceHeader">Starting Price</th>
+                <th id="endingPriceHeader">Ending Price</th>
+                <th>Change - $</th>
+                <th>Change - %</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        </tbody>
+    </table>
+
+    &nbsp;
+
+    <h2>Tracking Food Prices Over Time 📈</h2>
+
+    <p>Select up to 3 items using the drop-down menus below. You can also search by typing directly into the boxes to find a specific item (e.g., beef, lettuce).</p>
+
+    <div id="itemSelectionDiv">
+        <table id="itemSelectionTable">
+            <tr>
+                <td>
+                    <label for="item1List">Item #1:</label>
+                </td>
+
+                <td>
+                    <input id="item1Input" list="item1List" name="item" value="Apples (per kilogram)" class="userInput select-style dataListInput" onfocus="this.value=''" onchange="this.blur();" />
+                    <datalist id="item1List" ></datalist>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="item2List">Item #2:</label>
+                </td>
+
+                <td>
+                    <input id="item2Input" list="item2List" name="item" value="Oranges (per kilogram)" class="userInput select-style dataListInput" onfocus="this.value=''" onchange="this.blur();" />
+                    <datalist id="item2List" ></datalist>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <label for="item3List">Item #3:</label>
+                </td>
+
+                <td>
+                    <input id="item3Input" list="item3List" name="item" value="Limes (unit)" class="userInput select-style dataListInput" onfocus="this.value=''" onchange="this.blur();" />
+                    <datalist id="item3List" ></datalist>
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div id="multiItemChartDiv">
+        <canvas id="multiItemChart"></canvas>
+    </div>
+
+    <button class="saveImageButton" onclick="saveChart(itemChart)">Save image 💾</button>
+
+    <table id="multiItemOutputTable">
+        <tr>
+            <th>% Change in Price</th>
+            <th id="item1Header">A</th>
+            <th id="item2Header">B</th>
+            <th id="item3Header">C</th>
+        </tr>
+
+        <tr>
+            <td>1-year</td>
+            <td id="yr1Item1"></td>
+            <td id="yr1Item2"></td>
+            <td id="yr1Item3"></td>
+        </tr>
+
+        <tr>
+            <td>2-years</td>
+            <td id="yr2Item1"></td>
+            <td id="yr2Item2"></td>
+            <td id="yr2Item3"></td>
+        </tr>
+
+        <tr>
+            <td>3-years</td>
+            <td id="yr3Item1"></td>
+            <td id="yr3Item2"></td>
+            <td id="yr3Item3"></td>
+        </tr>
+
+        <tr>
+            <td>4-years</td>
+            <td id="yr4Item1"></td>
+            <td id="yr4Item2"></td>
+            <td id="yr4Item3"></td>
+        </tr>
+
+        <tr>
+            <td>5-years</td>
+            <td id="yr5Item1"></td>
+            <td id="yr5Item2"></td>
+            <td id="yr5Item3"></td>
+        </tr>
+
+        <tr>
+            <td>6-years</td>
+            <td id="yr6Item1"></td>
+            <td id="yr6Item2"></td>
+            <td id="yr6Item3"></td>
+        </tr>
+
+    </table>
+
+    &nbsp;
+
+    <h2>The Cost of Your Typical Grocery Trip 🛒</h2>
+
+    <p>This tool estimates your "personal food inflation rate". Use the drop-down menus to select foods that you typically buy at the grocery store. The chart will then show the price of your "basket" along with the change over time.</p>
+
+    <table id="basketSelectionTable">
+        <tr>
+            <th>Category</th>
+            <th>Item 1</th>
+            <th>Item 2</th>
+            <th>Item 3</th>
+        </tr>
+
+        <tr>
+            <td class="highlightCell">Meat / protein</td>
+            <td>
+                <select class="userInput3 select-style meatSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style meatSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style meatSelection basketSelection blankOption">
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="highlightCell">Fresh vegetables</td>
+            <td>
+                <select class="userInput3 select-style vegetableSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style vegetableSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style vegetableSelection basketSelection blankOption">
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="highlightCell">Fruit</td>
+            <td>
+                <select class="userInput3 select-style fruitSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style fruitSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style fruitSelection basketSelection blankOption">
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="highlightCell">Grain / carbs</td>
+            <td>
+                <select class="userInput3 select-style carbSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style carbSelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style carbSelection basketSelection blankOption">
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="highlightCell">Dairy</td>
+            <td>
+                <select class="userInput3 select-style dairySelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style dairySelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style dairySelection basketSelection blankOption">
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="highlightCell">Pantry staples</td>
+            <td>
+                <select class="userInput3 select-style pantrySelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style pantrySelection basketSelection blankOption">
+                </select>
+            </td>
+            <td>
+                <select class="userInput3 select-style pantrySelection basketSelection blankOption">
+                </select>
+            </td>
+        </tr>
+
+    </table>
+
+    <table id="basketControlTable">
+        <tr>
+            <td id="numberItemsCell"></td>
+            <td id="resetButtonCell"><button id="basketResetButton" onclick="clearBasket()">Clear basket</button></d>
+        </tr>
+    </table>
+
+    <div id="basketChartDiv">
+        <canvas id="basketChart"></canvas>
+    </div>
+
+    <button class="saveImageButton" onclick="saveChart(basketChart)">Save image 💾</button>
+
+    <table id="basketOutputTable">
+        <tr>
+            <th width="33%">Change in Basket Price</th>
+            <th width="33%">$</th>
+            <th width="33%">%</th>
+        </tr>
+
+        <tr>
+            <td>1-year</td>
+            <td id="basketYr1$" class="dataCell"></td>
+            <td id="basketYr1%" class="dataCell"></td>
+        </tr>
+
+        <tr>
+            <td>2-years</td>
+            <td id="basketYr2$" class="dataCell"></td>
+            <td id="basketYr2%" class="dataCell"></td>
+        </tr>
+
+        <tr>
+            <td>3-years</td>
+            <td id="basketYr3$" class="dataCell"></td>
+            <td id="basketYr3%" class="dataCell"></td>
+        </tr>
+
+        <tr>
+            <td>4-years</td>
+            <td id="basketYr4$" class="dataCell"></td>
+            <td id="basketYr4%" class="dataCell"></td>
+        </tr>
+
+        <tr>
+            <td>5-years</td>
+            <td id="basketYr5$" class="dataCell"></td>
+            <td id="basketYr5%" class="dataCell"></td>
+        </tr>
+
+        <tr>
+            <td>6-years</td>
+            <td id="basketYr6$" class="dataCell"></td>
+            <td id="basketYr6%" class="dataCell"></td>
+        </tr>
+
+    </table>
+
+
+    &nbsp;
+
+    <h2>Assorted Food Facts for Thought</h2>
+
+    <p>This section features some charts and insights that I found interesting as I dug into the data.</p>
+
+    <h3>Oil On the Rise</h3>
+
+    <p>Some of the steepest food price increases have come from cooking oils. While the cost of vegetable / canola oil was fairly steady from 2017 to 2019 (at roughly $6-$7 for 3 litres of oil), the years of 2020-2023 have seen a doubling in the price of cooking oil, with current pricing of approximately $12 per 3 litres.</p>
+
+    <div class="imageWrapper">
+        <img class="screenshotImage" src="https://themeasureofaplan.com/wp-content/uploads/2023/05/TMOAP-food-price-inflation-chart-34.png">
+    </div>
+
+    &nbsp;
+
+    <h3>Celery Mania</h3>
+
+    <p>With just a glance at the next chart, you could be forgiven for thinking that this charts out a meme stock or cryptocurrency.</p>
+    <p>The answer is more mundane -- instead, this shows the average price of celery in Canada. This negative-calorie nibble has seen wild price fluctations, bouncing between $1.50 to $5.00 per unit.</p>
+
+    <div class="imageWrapper">
+        <img class="screenshotImage" src="https://themeasureofaplan.com/wp-content/uploads/2023/05/TMOAP-food-price-inflation-chart-36.png">
+    </div>
+
+    &nbsp;
+
+    <h3>The Rise and Fall of Meat Prices</h3>
+
+    <p>Next up, a chart which compares the percentage price increases of meat and protein items over the past 6 years.</p>
+    <p>While the price of chicken thighs and chicken breast has increased by roughly 30% (from 2017 to 2023), the price of chicken drumsticks has actually decreased by 2.5% over the same time period. A worthwhile consideration for your next summertime barbecue!</p>
+    
+    <div class="imageWrapper">
+        <img class="screenshotImage" src="https://themeasureofaplan.com/wp-content/uploads/2023/05/TMOAP-food-price-inflation-chart-edit.png">
+    </div>
+
+    &nbsp;
+
+    <h3>Tracking My Personal Food Inflation Rate</h3>
+    
+    <p>Here's how the cost of my own typical grocery trip has changed over time:</p>
+    <ul>
+        <li>The cost of my basket of goods has increased by $25 over the past 6 years, from ~$68 in 2017 to ~$93 in 2023. This is an increase of ~37% over 6 years</li>
+        <li>Over the last year alone (2022 vs 2023), my average grocery bill has increased by $6.65, or +7.7%</li>
+    </ul>
+
+    <div class="imageWrapper">
+        <img class="screenshotImage" src="https://themeasureofaplan.com/wp-content/uploads/2023/05/price-basket-chart.png">
+    </div>
+
+    <p>Feel free to compute your own personal food inflation rate and share your stats at the bottom of this page.</p>
+
+    &nbsp;
+
+    <h2>Data Sources and Notes</h2>
+
+    <p>The underlying data for this post comes from the following sources:</p>
+
+    <ul>
+        <li><a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810024501" rel="noopener" target="_blank">StatCan data on monthly average retail prices for selected products</a></li>
+        <li><a href="https://www150.statcan.gc.ca/n1/pub/62f0014m/62f0014m2020008-eng.htm" rel="noopener" target="_blank">StatCan methodological supplement for the provincial monthly average retail prices table</a></li>
+    </ul>
+
+    <p>As noted in the second link: "the price data used in this analysis are calculated using scanner data (also known as transaction data) collected from Canadian retailers. Transaction data provide a comprehensive electronic record of the transactions made through a retailer’s point-of-sale system, and contain relevant pricing information, such as product descriptions and quantities sold. The use of transaction data for the calculation of the average prices in this table offers a significant quality advantage over traditional in-store collection, given the number of product prices available in the transaction data and the geographic coverage available."</p>
+
+    &nbsp;
+
+    <h2>Related Reading</h2>
+
+    <p>Other explorations into incomes, housing prices, taxes, and the overall cost of living in Canada:</p>
+    <ul>
+        <li><b><a href="https://themeasureofaplan.com/exploring-canadian-income/" target="_blank" rel="noopener">Exploring Canadian incomes</a></b> by province, age group, and sex</li>
+        <li><b><a href="https://themeasureofaplan.com/canadian-housing-affordability/" target="_blank" rel="noopener">Tracking Canadian Housing Market Affordability</a></b> -- data on Canadian home prices and affordability by city, from 1999 to 2023</li> 	
+        <li><b><a href="https://themeasureofaplan.com/rent-prices-versus-income/" target="_blank" rel="noopener">Rent prices versus income</a></b> in major Canadian cities</li>
+        <li><b><a href="https://themeasureofaplan.com/canadian-income-tax-calculator/" target="_blank" rel="noopener">2023 Canadian income tax calculator</a></b> -- a resource to compare tax rates and after-tax incomes across Canada</li> 	
+    </ul>
+
+    &nbsp;
+
+    <p>-----</p>
+    <p>Header illustration credit:</p>
+    <p><a href="https://www.freepik.com/author/goodstudiominsk" rel="noopener" target="_blank">goodstudiominsk</a></p>
+
+    <!--- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="range-slider-master/js/rSlider.min.js"></script>
+    <script src="foodPriceInflationScript.js"></script>
+
+</body>
+
+</html>
