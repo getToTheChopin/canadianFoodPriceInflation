@@ -556,6 +556,7 @@ function runItemChart(){
         
             scales: {
                 y: {
+                    beginAtZero: true,
                     ticks: {
                         // Include a dollar sign in the ticks and add comma formatting
                         callback: function(value, index, values) {                                    
@@ -651,9 +652,14 @@ function runItemChart(){
                     display: true,
                     labels: {
                         fontColor: "rgb(56,56,56)",
-                        boxWidth: 13,
+                        boxWidth: 30,
+                        boxHeight: 15,
                         padding: 10,
+                        font: {
+                            size: 17,
+                        }
                     },
+
                 },
 
                 tooltip: {
@@ -888,7 +894,7 @@ function runCategoryChart(){
             
             scales: {
                 y: {
-
+                    beginAtZero: true,                    
                     title: {
                         display: true,
                         text: "% change in avg. price",
@@ -1086,6 +1092,7 @@ function runBasketChart(){
     
         scales: {
             y: {
+                beginAtZero: true,
                 ticks: {
                     // Include a dollar sign in the ticks and add comma formatting
                     callback: function(value, index, values) {                                    
